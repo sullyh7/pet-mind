@@ -26,8 +26,8 @@ const Navbar = () => {
         </div>
 
         <div className='flex gap-x-3 items-center'>
-            <Button>Sign Up</Button>
-            <Button variant={"outline"}>Sign in</Button>
+            <Link href={"/sign-in"} className={cn(buttonVariants({variant: "default"}))}>Sign Up</Link>
+            <Link href={"/sign-in"} className={cn(buttonVariants({variant: "outline"}))}>Sign in</Link>
             {/* only on small screens */}
             <MenuIcon className='block sm:hidden border w-10 h-10 rounded-sm' strokeWidth={1}/>
         </div>
