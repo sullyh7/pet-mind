@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import Link from 'next/link'
 import { Button } from './button'
 
 const Hero = () => {
@@ -10,7 +11,9 @@ const Hero = () => {
                     {"Your Pet's Home, Away from Home"}
                 </h1>
                 <div className='flex flex-col gap-y-1 w-[50%] sm:w-full sm:flex-row justify-start gap-x-3'>
-                    <Button className='bg-[#db3066] text-background' size={"lg"}>Schedule a booking</Button>
+                    <Link href={"/Search"}>
+                        <Button className='bg-[#db3066] text-background' size={"lg"}>Schedule a booking</Button>
+                    </Link>
                     <Button size={"lg"}>About Us</Button>
                 </div>
             </div>
