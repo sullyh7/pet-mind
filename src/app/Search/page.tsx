@@ -85,7 +85,7 @@ const SearchPage: React.FC = () => {
       </div>
       {/*results*/}
       <div className="results grid grid-cols-1 md:grid-cols-2 gap-5">
-        {minderList?.length === 0 && <h1 className="text-1xl text-center font-bold mb-10 p-4 rounded">No results found</h1>}
+        {minderList?.length === 0 && <h1 className="text-1xl text-center font-bold mb-10 p-4 rounded col-span-2">No results found</h1>}
         {minderList?.length > 0 && minderList?.map(user => {
           return (
             <div className="flex flex-row items-center gap-x-5 w-full justify-start p-5 rounded bg-primary" key={user.name}>
