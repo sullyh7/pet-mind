@@ -5,7 +5,7 @@ import Sunset from '/public/image/AB.png';
 
 const AboutUsPage = () => {
   return (
-    <div className="m-5">
+    <div className="">
       <h2 className="text-5xl text-center font-bold mb-10">Welcome to PetMind, the app where your pets are treated like family!</h2>
       
       

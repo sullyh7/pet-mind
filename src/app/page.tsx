@@ -2,7 +2,6 @@ import WhyUsCard from "@/components/WhyUsCard";
 import Hero from "@/components/ui/Hero";
 import { Button } from "@/components/ui/button";
 import { MessageCircleIcon, Smile, SmileIcon, Users } from "lucide-react";
-import Image from "next/image";
 
 export default function Home() {
   return (
