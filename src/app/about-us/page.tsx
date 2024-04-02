@@ -1,7 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import Dog from '/public/image/ABUS.png';
-import Sunset from '/public/image/AB.png';
 
 const AboutUsPage = () => {
   return (
@@ -21,7 +19,7 @@ const AboutUsPage = () => {
         
         
         <div className="flex-1 flex justify-center">
-          <Image src={Dog} alt="AB" width={300} height={300} />
+          <Image src={"/about-us/friend.svg"} alt="AB" width={300} height={300} />
         </div>
       </div>
 
@@ -29,7 +27,7 @@ const AboutUsPage = () => {
       <div className="flex flex-col md:flex-row items-center justify-center mb-10">
         
         <div className="flex-1 flex justify-center md:justify-start md:mr-8">
-          <Image src={Sunset} alt="AB" width={300} height={300} />
+          <Image src={"/about-us/dog.svg"} alt="AB" width={300} height={300} />
         </div>
         
         
