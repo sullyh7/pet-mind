@@ -50,6 +50,7 @@ const SignIn = () => {
         })
     })
     form.reset();
+    router.refresh()
     router.push("/dashboard")
     console.log(values)
   }

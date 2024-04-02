@@ -26,7 +26,7 @@ export default async function RootLayout({
 
       <body className={inter.className}>
         <div className="text-[#331D42] flex flex-col gap-y-[6rem] mx-auto w-full max-w-screen-xl p-2.5 md:px-20 bg-background">
-          <Navbar user={user.data.user}/>
+          <Navbar/>
           <div className="px-5 min-h-screen ">
           {children}
           </div>

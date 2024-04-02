@@ -3,7 +3,7 @@
 import { navLinks } from '../lib/constants'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, buttonVariants } from './ui/button'
 import { cn } from '../lib/utils'
 import { LucideArrowRight, MenuIcon } from 'lucide-react'
@@ -13,9 +13,20 @@ import { createClient } from '../../utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 
-const Navbar = ({user}: {user: User | null}) => {
+const Navbar = () => {
     const client = createClient();
     const router = useRouter();
+
+    const [user, setUser] = useState<User | null>();
+    
+    useEffect(() => {
+        client.auth.onAuthStateChange((_, b) => {
+            console.log("CHANGE")
+            setUser(b?.user)
+        }) 
+        client.auth.getUser()
+        .then((u) => {setUser(u.data.user)})
+    }, [client.auth])
 
     return (
         <div className='w-full flex items-center justify-between'>
@@ -39,7 +50,7 @@ const Navbar = ({user}: {user: User | null}) => {
                 {!user && <Link href={"/sign-up"} className={cn(buttonVariants({ variant: "default" }))}>Sign Up</Link>}
                 {!user && <Link href={"/sign-in"} className={cn(buttonVariants({ variant: "outline" }))}>Sign in</Link>}
                 {user && <Link href={"/dashboard"} className={cn(" text-background bg-[#DB3066]", buttonVariants({ variant: "ghost" }))}>Dashboard</Link>}
-                {user && <Button onClick={async () => {await client.auth.signOut(); router.refresh()}}>Sign Out</Button>}
+                {user && <Button onClick={async () => {await client.auth.signOut(); router.refresh(); router.push("/sign-in")}}>Sign Out</Button>}
                 {/* only on small screens */}
                 <div className='items-center sm:hidden flex'>
                 <Sheet>
