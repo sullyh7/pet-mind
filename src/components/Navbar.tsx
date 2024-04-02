@@ -1,14 +1,22 @@
-import { navLinks } from '@/lib/constants'
+"use client";
+
+import { navLinks } from '../lib/constants'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, buttonVariants } from './ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '../lib/utils'
 import { LucideArrowRight, MenuIcon } from 'lucide-react'
 import { SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, Sheet } from './ui/sheet'
+import { User } from '@supabase/supabase-js'
+import { createClient } from '../../utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 
-const Navbar = async () => {
+const Navbar = ({user}: {user: User | null}) => {
+    const client = createClient();
+    const router = useRouter();
+
     return (
         <div className='w-full flex items-center justify-between'>
             {/* Logo */}
@@ -28,8 +36,10 @@ const Navbar = async () => {
             </div>
 
             <div className='flex gap-x-3 items-center'>
-                <Link href={"/sign-in"} className={cn(buttonVariants({ variant: "default" }))}>Sign Up</Link>
-                <Link href={"/sign-in"} className={cn(buttonVariants({ variant: "outline" }))}>Sign in</Link>
+                {!user && <Link href={"/sign-up"} className={cn(buttonVariants({ variant: "default" }))}>Sign Up</Link>}
+                {!user && <Link href={"/sign-in"} className={cn(buttonVariants({ variant: "outline" }))}>Sign in</Link>}
+                {user && <Link href={"/dashboard"} className={cn(" text-background bg-[#DB3066]", buttonVariants({ variant: "ghost" }))}>Dashboard</Link>}
+                {user && <Button onClick={async () => {await client.auth.signOut(); router.refresh()}}>Sign Out</Button>}
                 {/* only on small screens */}
                 <div className='items-center sm:hidden flex'>
                 <Sheet>
