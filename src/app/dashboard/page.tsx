@@ -1,22 +1,24 @@
-import React from 'react'
-import { createClient } from '../../../utils/supabase/server'
+import React from 'react';
+import { createClient } from '../../../utils/supabase/server';
 import BookingsView from '@/components/BookingsView';
 
 const Dashboard = async () => {
     const client = createClient();
-    const user = await client.auth.getUser()
+    const user = await client.auth.getUser();
     const profile = await client.from("profiles").select("*").single();
 
-  return (
-    <>
-    {profile.data && <div>
-    <h1 className='font-bold text-4xl sm:text-5xl'>Welcome back <span className='text-[#DB3066]'>{profile.data.first_name}</span></h1>
-    <BookingsView/>
-</div> }
-    
-    </>
-    
-  )
-}
+    return (
+        <div>
+            {profile.data && (
+                <div>
+                    <h1 className='font-bold text-4xl sm:text-5xl'>
+                        Welcome back <span className='text-[#DB3066]'>{profile.data.first_name}</span>
+                    </h1>
+                    <BookingsView />
+                </div>
+            )}
+        </div>
+    );
+};
 
-export default Dashboard
+export default Dashboard;
