@@ -1,6 +1,10 @@
 import React from 'react';
 import { createClient } from '../../../utils/supabase/server';
 import BookingsView from '@/components/BookingsView';
+import {Button} from '@/components/ui/button';
+import Link from 'next/link'
+
+
 
 const Dashboard = async () => {
     const client = createClient();
