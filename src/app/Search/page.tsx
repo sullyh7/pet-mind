@@ -2,6 +2,7 @@
 import React, {useState} from "react";
 import BookingsView from "@/components/BookingsView";
 import { Button } from "@/components/ui/button";
+import Cookies from 'js-cookie';
 
 type Minder = {
   name: string;
@@ -146,8 +147,10 @@ const SearchPage: React.FC = () => {
   };
 
   const handleBooking = (minder: Minder) => {
-    setBookings(prevBookings => [...prevBookings, minder]);
-};
+    const updatedBookings = [...bookings, minder];
+    setBookings(updatedBookings);
+    Cookies.set('bookingData', JSON.stringify(updatedBookings));
+  };
 
   return (
     <div className="m-5">
@@ -211,18 +214,17 @@ const SearchPage: React.FC = () => {
                                 <p>Description: {user.bio}</p>
                                 <p>Rating: {user.rating}</p>
                                 <Button 
-  onClick={() => handleBooking(user)} 
-  className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background"
->
-  Request Booking
-</Button>
-
+                                  onClick={() => handleBooking(user)} 
+                                  className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background"
+                                >
+                                  Request Booking
+                                </Button>
                             </div>
                         </div>
                     );
                 })}
         </div>
-        <BookingsView bookings={bookings} />
+        <BookingsView bookings={bookings}/>
     </div>
 );
 };
