@@ -1,8 +1,16 @@
-import React from 'react';
-import { Minder } from '../../utils/supabase';
+import React from 'react'
+
+interface Booking {
+  name: string;
+  location: string;
+  image: string;
+}
+
+interface BookingsViewProps {
+  bookings: Booking[];
+}
 
 const BookingsView: React.FC<BookingsViewProps> = ({ bookings }) => {
-  // Check if bookings array is empty or undefined
   if (!bookings || bookings.length === 0) {
     return <div>No bookings available</div>;
   }
