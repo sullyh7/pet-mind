@@ -3,6 +3,14 @@ import React, {useState} from "react";
 import BookingsView from "@/components/BookingsView";
 import { Button } from "@/components/ui/button";
 
+type Minder = {
+  name: string;
+  location: string;
+  bio: string;
+  rating: number;
+  image: string;
+};
+
 const SearchPage: React.FC = () => {
   // Placeholder data
   const minders = [
