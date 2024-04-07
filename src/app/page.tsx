@@ -2,6 +2,8 @@ import WhyUsCard from "@/components/WhyUsCard";
 import Hero from "@/components/ui/Hero";
 import { Button } from "@/components/ui/button";
 import { MessageCircleIcon, Smile, SmileIcon, Users } from "lucide-react";
+import Link from 'next/link'
+
 
 export default function Home() {
   return (
@@ -18,7 +20,7 @@ export default function Home() {
 
       <div className="flex flex-col items-center justify-center gap-y-10">
         <h1 className="text-5xl sm:text-5xl md:text-7xl text-center font-bold">Book a minder now and get peace of mind!</h1>
-        <Button className="bg-[#db3066] text-primary text-xl hover:bg-[#db3066]" size={"xl"}>Get Started</Button>
+        <Link href={"/sign-in"}><Button className="bg-[#db3066] text-primary text-xl hover:bg-[#db3066]" size={"xl"}>Get Started</Button></Link> 
       </div>
     </main>
   )

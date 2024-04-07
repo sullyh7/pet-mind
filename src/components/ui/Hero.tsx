@@ -14,7 +14,7 @@ const Hero = () => {
                     <Link href={"/Search"}>
                         <Button className='bg-[#db3066] text-background' size={"lg"}>Schedule a booking</Button>
                     </Link>
-                    <Button size={"lg"}>About Us</Button>
+                    <Link href={"/about-us"}><Button size={"lg"}>About Us</Button></Link>
                 </div>
             </div>
 
