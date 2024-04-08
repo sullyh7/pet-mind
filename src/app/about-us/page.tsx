@@ -11,9 +11,7 @@ const AboutUsPage = () => {
         <section className="flex-1">
           <h2 className="text-3xl text-center font-bold mb-3">Our Mission</h2>
           <p className="text-lg text-center">
-            Our mission is to provide a safe, loving, and reliable service for pet owners who need to
-            find caretakers for their beloved animals. Whether you&apos;re away for work, vacation, or
-            just need someone to walk your pet during the day, we&apos;re here to help.
+            Providing safe, loving pet care whenever you need it—whether for work, vacation, or daily walks
           </p>
         </section>
         
@@ -32,11 +30,10 @@ const AboutUsPage = () => {
         
         
         <section className="flex-1">
-          <h2 className="text-3xl text-center md:text-left font-bold mb-3">Our Vision</h2>
-          <p className="text-lg text-center md:text-left">
-            We envision a world where every pet is cared for, even when their owners can&apos;t be
-            there. PetMind aims to create a community of pet lovers supporting each other,
-            ensuring that every pet receives the care and attention they deserve.
+          <h2 className="text-3xl text-center font-bold mb-3">Our Vision</h2>
+          <p className="text-lg text-center">
+          PetMind ensures every pet receives care, even when owners can't be there.
+          Join our community of pet lovers dedicated to providing the attention they deserve.
           </p>
         </section>
       </div>
