@@ -10,7 +10,7 @@ const MinderDashboard = async () => {
     const client = createClient();
     const user = await client.auth.getUser()
     const profile = await client.from("minder_profiles").select("*").eq("id", user.data.user?.id || "").single();
-    const bookings = (await client.from("bookings").select("*"))
+    const bookings = (await client.from("bookings").select("*").eq("minder_id", user.data.user?.id || ""))
   return (
     <>
     {profile.data && <div>
@@ -18,7 +18,7 @@ const MinderDashboard = async () => {
 </div> }
 
       <h1>count: {bookings.count}</h1>
-<BookingsView bookings={bookings.data}/>
+<BookingsView bookings={bookings.data} owner={false}/>
     
     </>
     
