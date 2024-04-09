@@ -1,154 +1,60 @@
 'use client'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Button } from "@/components/ui/button";
+import { createClient } from "../../../utils/supabase/client";
+import Image from "next/image";
 
 type Minder = {
-  name: string;
-  location: string;
-  bio: string;
-  rating: number;
-  image: string;
-};
+  avatar_url: string | null;
+  description: string | null;
+  first_name: string | null;
+  id: string;
+  last_name: string | null;
+  location: string | null;
+  rating: number | null;
+  updated_at: string | null;
+}
 
 const SearchPage: React.FC = () => {
-  // Placeholder data
-  const minders = [
-    {
-      name: "Jane Smith",
-      location: "London, UK",
-      bio: "I love cuddles and hiking",
-      rating: 4.8,
-      image: "https://i.pravatar.cc/150?img=32",
-    },
-    {
-      name: "Bob Johnson",
-      location: "New York, USA",
-      bio: "I love playing video games",
-      rating: 4.5,
-      image: "https://i.pravatar.cc/150?img=33",
-    },
-    {
-      name: "Alice Brown",
-      location: "Sydney, Australia",
-      bio: "I love reading books",
-      rating: 4.7,
-      image: "https://i.pravatar.cc/150?img=28",
-    },
-    {
-      name: "Mark Davis",
-      location: "Paris, France",
-      bio: "I love spending time with my family",
-      rating: 4.7,
-      image: "https://i.pravatar.cc/150?img=59",
-    },
-    {
-      name: "Emily Wilson",
-      location: "Tokyo, Japan",
-      bio: "I love going to the beach",
-      rating: 4.2,
-      image: "https://i.pravatar.cc/150?img=36",
-    },
-    {
-      name: "Michael Chen",
-      location: "London, UK",
-      bio: "I love playing piano",
-      rating: 4.6,
-      image: "https://i.pravatar.cc/150?img=57",
-    },
-    {
-      name: "Olivia Taylor",
-      location: "San Francisco, USA",
-      bio: "I love playing chess",
-      rating: 3.2,
-      image: "https://i.pravatar.cc/150?img=29",
-    },
-    {
-      name: "David Kim",
-      location: "Seoul, South Korea",
-      bio: "I love going to the mountains",
-      rating: 4.4,
-      image: "https://i.pravatar.cc/150?img=14",
-    },
-    {
-      name: "Sophia Nguyen",
-      location: "Los Angeles, USA",
-      bio: "I love playing guitar",
-      rating: 3.9,
-      image: "https://i.pravatar.cc/150?img=35",
-    },
-    {
-      name: "Daniel Lee",
-      location: "Seoul, South Korea",
-      bio: "I love reading manga",
-      rating: 3.9,
-      image: "https://i.pravatar.cc/150?img=56",
-    },
-    {
-      name: "Emma Davis",
-      location: "Paris, France",
-      bio: "I love spending time with my friends",
-      rating: 4.4,
-      image: "https://i.pravatar.cc/150?img=21",
-    },
-    {
-      name: "John Smith",
-      location: "London, UK",
-      bio: "I love playing piano",
-      rating: 4.1,
-      image: "https://i.pravatar.cc/150?img=55",
-    },
-    {
-      name: "Emily Johnson",
-      location: "New York, USA",
-      bio: "I love reading books",
-      rating: 4.3,
-      image: "https://i.pravatar.cc/150?img=27",
-    },
-    {
-      name: "Michael Davis",
-      location: "London, UK",
-      bio: "I love spending time with my family",
-      rating: 3.8,
-      image: "https://i.pravatar.cc/150?img=58",
-    },
-  ];
 
-  const [minderList, setMinderList] = React.useState(minders);
+  const client = createClient();
+  useEffect(() => {
+    client.from("minder_profiles").select("*")
+    .then(resp => setMinderList(resp.data));
+  }, [client])
+
+  const [minderList, setMinderList] = useState<null | Minder[]>(null)
   const [searchText, setSearchText] = React.useState("");
   const [locationFilter, setLocationFilter] = React.useState("");
   const [ratingFilter, setRatingFilter] = React.useState<number | null>(null);
   const [isFiltering, setIsFiltering] = React.useState(false);
-  const [bookings, setBookings] = useState<Minder[]>([]);
 
   const handleSearch = () => {
-    let filteredList = minders;
+    let filteredList = minderList;
+    if (filteredList == null) {
+      return;
+    }
 
     if (searchText) {
       filteredList = filteredList.filter(user =>
-        user.name.toLowerCase().includes(searchText.toLowerCase())
+        user.first_name?.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
     if (isFiltering) {
       if (locationFilter) {
         filteredList = filteredList.filter(user =>
-          user.location.toLowerCase().includes(locationFilter.toLowerCase())
+          user.location?.toLowerCase().includes(locationFilter.toLowerCase())
         );
       }
 
       if (ratingFilter !== null) {
-        filteredList = filteredList.filter(user => user.rating >= ratingFilter);
+        filteredList = filteredList.filter(user => user.rating! >= ratingFilter);
       }
     }
 
     setMinderList(filteredList);
   };
-
-  const handleBooking = (minder: Minder) => {
-    const updatedBookings = [...bookings, minder];
-    setBookings(updatedBookings);
-  };
-
   return (
     <div className="m-5">
         <h1 className="text-5xl text-center font-bold mb-10">Search For Minders</h1>
@@ -195,7 +101,7 @@ const SearchPage: React.FC = () => {
                 <span className="text-1xl text-center font-bold mb-5 p-3 rounded w-full md:w-20 border-2 border-primary">{ratingFilter}</span>
             </div>
         )}
-
+        {minderList && 
         <div className="results grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
             {minderList.length === 0 && (
                 <h1 className="text-1xl text-center font-bold mb-10 p-4 rounded col-span-2">No results found</h1>
@@ -203,15 +109,14 @@ const SearchPage: React.FC = () => {
             {minderList.length > 0 &&
                 minderList.map(user => {
                     return (
-                        <div className="flex flex-row items-center gap-x-5 w-full justify-start p-5 rounded bg-primary" key={user.name}>
-                            {/* <img src={user.image} alt={user.name} width={150} height={150} /> */}
+                        <div className="flex flex-row items-center gap-x-5 w-full justify-start p-5 rounded bg-primary" key={user.id}>
+                            {/* <Image src={user.avatar_url!} alt={user.first_name!} width={150} height={150} /> */}
                             <div className="text-left flex flex-col gap-y-3 w-full">
-                                <h1 className="text-1xl font-bold">{user.name}</h1>
+                                <h1 className="text-1xl font-bold">{user.first_name + " " + user.last_name}</h1>
                                 <p>{user.location}</p>
-                                <p>Description: {user.bio}</p>
-                                <p>Rating: {user.rating}</p>
+                                <p>Description: {user.description}</p>
+                                <p>Rating: {user.rating == 0 ? "No ratings" : user.rating}</p>
                                 <Button 
-                                  onClick={() => handleBooking(user)} 
                                   className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background"
                                 >
                                   Request Booking
@@ -220,7 +125,7 @@ const SearchPage: React.FC = () => {
                         </div>
                     );
                 })}
-        </div>
+        </div>}
     </div>
 );
 };
