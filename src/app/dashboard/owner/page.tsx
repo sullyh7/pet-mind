@@ -16,7 +16,7 @@ const Dashboard = async () => {
     <>
     {profile.data && <div>
     <h1 className='font-bold text-4xl sm:text-5xl'>Welcome back <span className='text-[#DB3066]'>{profile.data.first_name}</span></h1>
-    <BookingsView/>
+    <BookingsView bookings={bookings}/>
 </div> }
 
     
