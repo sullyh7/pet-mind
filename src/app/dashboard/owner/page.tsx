@@ -10,13 +10,14 @@ const Dashboard = async () => {
     const client = createClient();
     const user = await client.auth.getUser()
     const profile = await client.from("owner_profiles").select("*").eq("id", user.data.user?.id || "").single();
-    const bookings = await (await client.from("bookings").select("*")).data
+    const bookings = (await client.from("bookings").select("*"))
 
   return (
     <>
     {profile.data && <div>
     <h1 className='font-bold text-4xl sm:text-5xl'>Welcome back <span className='text-[#DB3066]'>{profile.data.first_name}</span></h1>
-    <BookingsView bookings={bookings}/>
+    <h1>{bookings.count}</h1>
+    <BookingsView bookings={bookings.data}/>
 </div> }
 
     
