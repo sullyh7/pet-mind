@@ -93,7 +93,7 @@ const BookForm = ({minder_id}: {minder_id: string}) => {
                                         selected={field.value}
                                         onSelect={field.onChange}
                                         disabled={(date) =>
-                                            date > new Date() || date < new Date("1900-01-01")
+                                            date < new Date()
                                         }
                                         initialFocus
                                     />
@@ -114,7 +114,7 @@ const BookForm = ({minder_id}: {minder_id: string}) => {
                     name="duration"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Duration</FormLabel>
+                            <FormLabel>Duration (hours)</FormLabel>
                             <FormControl>
                                 <Input type='number'  {...field} />
                             </FormControl>
@@ -136,7 +136,7 @@ const BookForm = ({minder_id}: {minder_id: string}) => {
                     )}
                 />
 
-                <Button type="submit" className='bg-[#DB3066] text-background' >Sign up</Button>
+                <Button type="submit" className='bg-[#DB3066] text-background' >Request Booking</Button>
             </form>
         </Form>
     )
