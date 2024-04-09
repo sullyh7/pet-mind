@@ -9,7 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      profiles: {
+      minder_profiles: {
+        Row: {
+          avatar_url: string | null
+          description: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          location: string | null
+          rating: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          description?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          location?: string | null
+          rating?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          description?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          location?: string | null
+          rating?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "minder_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      owner_profiles: {
         Row: {
           first_name: string | null
           id: string
@@ -30,6 +71,38 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "owner_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          first_name: string | null
+          id: string
+          last_name: string | null
+          type: Database["public"]["Enums"]["user_role"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          type?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          type?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
             foreignKeyName: "profiles_id_fkey"
             columns: ["id"]
             isOneToOne: true
@@ -46,7 +119,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "owner" | "minder"
     }
     CompositeTypes: {
       [_ in never]: never

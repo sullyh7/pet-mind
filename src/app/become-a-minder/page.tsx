@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { signUpFormSchema } from '@/lib/form/signup'
+import { becomeAMinderFormSchema} from '@/lib/form/signup'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -12,22 +12,25 @@ import { createClient } from '../../../utils/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { AuthResponse } from '@supabase/supabase-js';
 
-const SignUp = () => {
+const BecomeAMinder = () => {
   const supabase = createClient();
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof signUpFormSchema>>({
-    resolver: zodResolver(signUpFormSchema),
+  const form = useForm<z.infer<typeof becomeAMinderFormSchema>>({
+    resolver: zodResolver(becomeAMinderFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
+      location: "",
+      description: "",
     },
   })
 
-  function onSubmit(values: z.infer<typeof signUpFormSchema>) {
+  function onSubmit(values: z.infer<typeof becomeAMinderFormSchema>) {
     console.log("Signing up!");
+    console.log(values);
     supabase.auth.signUp({
       email: values.email,
       password: values.password,
@@ -35,7 +38,11 @@ const SignUp = () => {
         data: {
           firstName: values.firstName,
           lastName: values.lastName,
-          type: "owner"
+          location: values.location,
+          type: "minder",
+          avatarUrl: "./logos/logo.png",
+          rating:0,
+          desc: values.description,
         },
         emailRedirectTo: window.location.origin + "/login"
       }
@@ -46,14 +53,14 @@ const SignUp = () => {
           description: resp.error.message + " " + resp.error.cause,
           variant: "destructive",
         })
-        console.log("Error stack:"  +resp.error.stack)
+        console.log(resp.error.stack);
+        console.log(resp.error.name)
         return;
       }
 
-
       toast({
         title: "Signed up.",
-
+        
       })
     }).catch((e: any) => {
       toast({
@@ -125,6 +132,32 @@ const SignUp = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>A bit about you:</FormLabel>
+                <FormControl>
+                  <Input type='text' placeholder="John" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input type='text' placeholder="John" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button type="submit" className='bg-[#DB3066] text-background' >Sign up</Button>
         </form>
       </Form>
@@ -132,4 +165,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default BecomeAMinder;

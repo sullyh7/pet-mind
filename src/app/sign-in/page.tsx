@@ -18,13 +18,6 @@ const SignIn = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  useEffect(() => {
-    supabase.auth.getUser().then(user => {
-        if (user.data.user) {
-            router.push("/dashboard")
-        }
-    })
-  }, [router, supabase])
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -51,7 +44,7 @@ const SignIn = () => {
     })
     form.reset();
     router.refresh()
-    router.push("/dashboard")
+    router.push("/")
     console.log(values)
   }
 

@@ -1,15 +1,15 @@
 import React from 'react'
-import { createClient } from '../../../utils/supabase/server'
 import BookingsView from '@/components/BookingsView';
 import {Button} from '@/components/ui/button';
 import Link from 'next/link'
+import { createClient } from '../../../../utils/supabase/server';
 
 
 
-const Dashboard = async () => {
+const MinderDashboard = async () => {
     const client = createClient();
     const user = await client.auth.getUser()
-    const profile = await client.from("profiles").select("*").single();
+    const profile = await client.from("minder_profiles").select("*").eq("id", user.data.user?.id || "").single();
 
   return (
     <>
@@ -25,5 +25,4 @@ const Dashboard = async () => {
   )
 }
 
-export default Dashboard;
-
+export default MinderDashboard;
