@@ -9,8 +9,8 @@ export const navLinks = [
         href: "/about-us"
     },
     {
-        title: "Services",
-        href: "/Search",
+        title: "Find a minder",
+        href: "/search",
     },
     {
         title: "Become a Minder",
