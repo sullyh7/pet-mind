@@ -9,6 +9,58 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          approved: boolean | null
+          date: string | null
+          duration: number | null
+          id: number
+          minder_id: string | null
+          owner_id: string | null
+          pet: string | null
+        }
+        Insert: {
+          approved?: boolean | null
+          date?: string | null
+          duration?: number | null
+          id?: never
+          minder_id?: string | null
+          owner_id?: string | null
+          pet?: string | null
+        }
+        Update: {
+          approved?: boolean | null
+          date?: string | null
+          duration?: number | null
+          id?: never
+          minder_id?: string | null
+          owner_id?: string | null
+          pet?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_minder_id_fkey"
+            columns: ["minder_id"]
+            isOneToOne: false
+            referencedRelation: "minder_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "minder_fk"
+            columns: ["minder_id"]
+            isOneToOne: false
+            referencedRelation: "minder_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_fk"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "owner_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       minder_profiles: {
         Row: {
           avatar_url: string | null

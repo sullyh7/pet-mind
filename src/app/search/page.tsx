@@ -3,6 +3,9 @@ import React, {useEffect, useState} from "react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "../../../utils/supabase/client";
 import Image from "next/image";
+import { UserResponse } from "@supabase/supabase-js";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type Minder = {
   avatar_url: string | null;
@@ -21,6 +24,7 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     client.from("minder_profiles").select("*")
     .then(resp => setMinderList(resp.data));
+    client.auth.getUser().then(d => setCurrentUser(d))
   }, [client])
 
   const [minderList, setMinderList] = useState<null | Minder[]>(null)
@@ -28,6 +32,7 @@ const SearchPage: React.FC = () => {
   const [locationFilter, setLocationFilter] = React.useState("");
   const [ratingFilter, setRatingFilter] = React.useState<number | null>(null);
   const [isFiltering, setIsFiltering] = React.useState(false);
+  const [currentUser, setCurrentUser] = useState<UserResponse | null>();
 
   const handleSearch = () => {
     let filteredList = minderList;
@@ -110,17 +115,18 @@ const SearchPage: React.FC = () => {
                 minderList.map(user => {
                     return (
                         <div className="flex flex-row items-center gap-x-5 w-full justify-start p-5 rounded bg-primary" key={user.id}>
-                            {/* <Image src={user.avatar_url!} alt={user.first_name!} width={150} height={150} /> */}
+                            <Image src={user.avatar_url?.substring(1)!} alt={user.first_name!} width={150} height={150} />
                             <div className="text-left flex flex-col gap-y-3 w-full">
                                 <h1 className="text-1xl font-bold">{user.first_name + " " + user.last_name}</h1>
                                 <p>{user.location}</p>
                                 <p>Description: {user.description}</p>
                                 <p>Rating: {user.rating == 0 ? "No ratings" : user.rating}</p>
-                                <Button 
-                                  className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background"
+                                <Link
+                                href={currentUser?.data.user ? `/book/${user.id}` : "/sign-in"}
+                                  className={cn("inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background")}
                                 >
-                                  Request Booking
-                                </Button>
+                                  {currentUser?.data.user ? "Book" : "Sign in to book"} 
+                                </Link>
                             </div>
                         </div>
                     );

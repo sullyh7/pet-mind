@@ -32,9 +32,18 @@ const SignIn = () => {
         email: values.email,
         password: values.password,
     }).then((d) => {
+      if (d.error) {
+        toast({
+          title: "There was an error signing in.",
+          description: d.error.message,
+          variant:"destructive"
+      })
+      return;
+      }
         toast({
             title: "Signing in...",
             description: d.data.user ? "Successful" : "Try again",
+            variant: d.data.user ? "default" : "destructive"
         })
     }).catch(() => {
         toast({

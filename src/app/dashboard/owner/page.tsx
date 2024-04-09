@@ -10,6 +10,7 @@ const Dashboard = async () => {
     const client = createClient();
     const user = await client.auth.getUser()
     const profile = await client.from("owner_profiles").select("*").eq("id", user.data.user?.id || "").single();
+    const bookings = await (await client.from("bookings").select("*")).data
 
   return (
     <>
@@ -18,7 +19,6 @@ const Dashboard = async () => {
     <BookingsView/>
 </div> }
 
-<Link href={"/review"}> <Button>Leave a review!</Button> </Link>
     
     </>
     
