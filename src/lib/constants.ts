@@ -10,7 +10,7 @@ export const navLinks = [
     },
     {
         title: "Services",
-        href: "/Search",
+        href: "/search",
     },
     {
         title: "Become a Minder",

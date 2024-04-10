@@ -1,38 +1,49 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
-import "../app/globals.css";
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import Cookies from 'js-cookie';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import React from 'react'
+import "../app/globals.css";
 
+const REVIEWS_STORAGE_KEY = 'userReviews';
 
 interface Review {
   id: number;
   name: string;
+  minderName: string;
   content: string;
   rating: number;
 }
 
 const ReviewForm: React.FC<{ onAddReview: (newReview: Omit<Review, 'id'>) => void }> = ({ onAddReview }) => {
   const [name, setName] = useState<string>('');
+  const [minderName, setMinderName] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [rating, setRating] = useState<number>(5);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onAddReview({ name, content, rating });
+    onAddReview({ name, minderName, content, rating });
     setName('');
+    setMinderName('');
     setContent('');
     setRating(5);
   };
 
   return (
-
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input
         type="text"
-        placeholder="Pet Minder"
+        placeholder="Your Name"
         value={name}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+        className="border p-2"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Pet Minder's Name"
+        value={minderName}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setMinderName(e.target.value)}
         className="border p-2"
         required
       />
@@ -45,7 +56,7 @@ const ReviewForm: React.FC<{ onAddReview: (newReview: Omit<Review, 'id'>) => voi
       />
       <select
         value={rating}
-        onChange={(e: ChangeEvent<HTMLSelectElement>) => setRating(parseInt(e.target.value))}
+        onChange={(e: ChangeEvent<HTMLSelectElement>) => setRating(parseInt(e.target.value, 10))}
         className="border p-2"
         required
       >
@@ -56,7 +67,6 @@ const ReviewForm: React.FC<{ onAddReview: (newReview: Omit<Review, 'id'>) => voi
         <option value="1">1 - Terrible</option>
       </select>
       <button type="submit" className="bg-[#db3066] text-white p-2">Submit Review</button>
-
     </form>
   );
 };
@@ -67,6 +77,7 @@ const ReviewList: React.FC<{ reviews: Review[] }> = ({ reviews }) => {
       {reviews.map(review => (
         <div key={review.id} className="border p-4 my-2">
           <h3 className="font-bold">{review.name}</h3>
+          <p>Pet Minder's Name: {review.minderName}</p>
           <p>{review.content}</p>
           <p>Rating: {review.rating}</p>
         </div>
@@ -75,23 +86,53 @@ const ReviewList: React.FC<{ reviews: Review[] }> = ({ reviews }) => {
   );
 };
 
+const ClearReviewsButton: React.FC<{ onClearReviews: () => void }> = ({ onClearReviews }) => {
+  return (
+    <button onClick={onClearReviews} className="bg-[#db3066] text-white p-2 rounded">
+      Clear Reviews
+    </button>
+  );
+};
+
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
 
+  useEffect(() => {
+    const storedReviewsJson = Cookies.get(REVIEWS_STORAGE_KEY);
+    if (storedReviewsJson) {
+      try {
+        const storedReviews = JSON.parse(storedReviewsJson);
+        setReviews(storedReviews);
+      } catch (error) {
+        console.error("Failed to parse reviews from cookies.", error);
+      }
+    }
+  }, []);
+
   const handleAddReview = (newReview: Omit<Review, 'id'>) => {
     const newId = reviews.length > 0 ? reviews[reviews.length - 1].id + 1 : 1;
-    setReviews([...reviews, { ...newReview, id: newId }]);
+    const updatedReviews = [...reviews, { ...newReview, id: newId }];
+    setReviews(updatedReviews);
+    Cookies.set(REVIEWS_STORAGE_KEY, JSON.stringify(updatedReviews), { expires: 365 });
+  };
+
+  const handleClearReviews = () => {
+    Cookies.remove(REVIEWS_STORAGE_KEY);
+    setReviews([]); // Clear reviews from state, immediately updating the UI
   };
 
   return (
     <>
-    <Navbar />
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Customer Reviews</h1>
-      <ReviewForm onAddReview={handleAddReview} />
-      <ReviewList reviews={reviews} />
-    </div>
-    <Footer/>
+      <Navbar />
+      <div className="max-w-2xl mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Customer Reviews</h1>
+        <ReviewForm onAddReview={handleAddReview} />
+        <ReviewList reviews={reviews} />
+        <ClearReviewsButton onClearReviews={handleClearReviews} />
+      </div>
+      <Footer />
     </>
   );
 }
+
+
