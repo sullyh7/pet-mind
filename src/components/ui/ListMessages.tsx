@@ -1,8 +1,6 @@
 "use client"
 
 import React from 'react';
-import Image from 'next/image';
-import ChatInput from '@/components/ui/ChatInput';
 import { useMessage } from '@/lib/store/messages';
 import Message from './Message';
 
