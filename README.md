@@ -17,6 +17,9 @@ npm install
 ```
 npm install typescript
 ```
+```
+npm install zustand
+```
 The terminal will create and compile the build. In order to run it, use:
 ```
 npm run dev
