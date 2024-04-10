@@ -14,13 +14,11 @@ Install all required dependencies using NPM:
 ```
 npm install
 ```
-Having installed all dependencies, it is now possible to build the project by using:
 ```
-npm run build
+npm install typescript
 ```
 The terminal will create and compile the build. In order to run it, use:
 ```
-npm start
+npm run dev
 ```
 The terminal will run the build at `localhost:3000` which can be accessed by navigating to `http://localhost:3000` in the web browser. This will take you to the landing page. The terminal will then compile next pages upon navigating the site.
-
