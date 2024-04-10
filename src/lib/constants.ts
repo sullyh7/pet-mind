@@ -9,11 +9,15 @@ export const navLinks = [
         href: "/about-us"
     },
     {
-        title: "Find a minder",
-        href: "/search",
+        title: "Services",
+        href: "/Search",
     },
     {
         title: "Become a Minder",
-        href: "/become-a-minder"
+        href: "/sign-up"
+    },
+    {
+        title: "Message",
+        href: "/message"
     }
 ]
