@@ -18,13 +18,6 @@ const SignIn = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  useEffect(() => {
-    supabase.auth.getUser().then(user => {
-        if (user.data.user) {
-            router.push("/dashboard")
-        }
-    })
-  }, [router, supabase])
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -39,9 +32,18 @@ const SignIn = () => {
         email: values.email,
         password: values.password,
     }).then((d) => {
+      if (d.error) {
+        toast({
+          title: "There was an error signing in.",
+          description: d.error.message,
+          variant:"destructive"
+      })
+      return;
+      }
         toast({
             title: "Signing in...",
             description: d.data.user ? "Successful" : "Try again",
+            variant: d.data.user ? "default" : "destructive"
         })
     }).catch(() => {
         toast({
@@ -51,7 +53,7 @@ const SignIn = () => {
     })
     form.reset();
     router.refresh()
-    router.push("/dashboard")
+    router.push("/")
     console.log(values)
   }
 

@@ -1,51 +1,84 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+"use client"
+import React from 'react'
+import { ColumnDef } from "@tanstack/react-table"
+import { DataTable } from './DataTable';
+import Link from 'next/link';
+import { CheckCircle, LucideMessageSquareText } from 'lucide-react';
+import { Button } from './ui/button';
 
 interface Booking {
-  name: string;
-  location: string;
-  image: string;
+  approved: boolean | null;
+  date: string | null;
+  duration: number | null;
+  id: number;
+  minder_id: string | null;
+  owner_id: string | null;
+  pet: string | null;
 }
 
 interface BookingsViewProps {
-  bookings: Booking[];
+  bookings: Booking[] | null,
+  owner: boolean
 }
 
-const BookingsView: React.FC<BookingsViewProps> = ({ bookings: initialBookings }) => {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+const BookingsView = ({bookings, owner}: BookingsViewProps) => {
 
-  useEffect(() => {
-    const bookingData = 'bookingData';
-    const storedBookings = Cookies.get(bookingData);
+  const columns: ColumnDef<Booking>[] = [
+    {
+      accessorKey: "approved",
+      header: () => <div className="text-right">Approved</div>,
+      cell: ({ row }) => {
+        const val = parseFloat(row.getValue("approved"))
+   
+        return <div className="text-right font-medium">{val ? "Yes" : "Pending"}</div>
+      },
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => {
+        const val: string = row.getValue("date")
+        const date = new Date(val).toString()
 
-    if (storedBookings) {
-      setBookings(JSON.parse(storedBookings));
-    } else {
-      setBookings(initialBookings);
-      Cookies.set(bookingData, JSON.stringify(initialBookings));
+   
+        return <div className=" font-medium">{date}</div>
+      },
+    },
+    {
+      accessorKey: "duration",
+      header: "Duration (hours)",
+    },
+    {
+      accessorKey: "pet",
+      header: "Pet",
+    },
+    owner ? {
+      accessorKey: "minder_id",
+      header: "Chat with minder",
+      cell: ({row}) => {
+        const minder = row.getValue("minder_id");
+        return <Link href={"/chat/" + minder}><LucideMessageSquareText/></Link>
+      }
+    } : {
+      accessorKey: "id",
+      header: "Approve Booking",
+      cell: ({row}) => {
+        const booking = row.getValue("id");
+        return <Button onClick={() => {}}><CheckCircle/></Button>
+      }
     }
-  }, [initialBookings]);
-
-  if (!bookings || bookings.length === 0) {
-    return <div>No bookings available</div>;
+  ]
+  if (!bookings) {
+    return <h1>No bookings.</h1>
   }
-
+  if(bookings == undefined) {
+    return <h1>Error loading bookings</h1>
+  }
   return (
-    <div className="bookings">
-      <h1 className="text-5xl text-center font-bold mt-10 mb-10">Bookings</h1>
-      {bookings.map((booking, index) => (
-        <div key={index} className="booking flex flex-row items-center gap-x-5 w-full justify-start p-5 rounded bg-primary mb-5">
-          <img src={booking.image} alt={booking.name} width={150} height={150} />
-          <div className="text-left flex flex-col gap-y-3 w-full">
-            <h1 className="text-1xl font-bold">{booking.name}</h1>
-            <p>{booking.location}</p>
-          </div>
-        </div>
-      ))}
+    <div>
+      <DataTable columns={columns} data={bookings}/>
     </div>
-  );
-};
+  )
+}
 
-export default BookingsView;
-
+export default BookingsView

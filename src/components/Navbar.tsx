@@ -21,7 +21,7 @@ const Navbar = () => {
     
     useEffect(() => {
         client.auth.onAuthStateChange((_, b) => {
-            console.log("CHANGE")
+            console.log(b?.user.email);
             setUser(b?.user)
         }) 
         client.auth.getUser()
@@ -49,7 +49,7 @@ const Navbar = () => {
             <div className='flex gap-x-3 items-center'>
                 {!user && <Link href={"/sign-up"} className={cn(buttonVariants({ variant: "default" }))}>Sign Up</Link>}
                 {!user && <Link href={"/sign-in"} className={cn(buttonVariants({ variant: "outline" }))}>Sign in</Link>}
-                {user && <Link href={"/dashboard"} className={cn(" text-background bg-[#DB3066]", buttonVariants({ variant: "ghost" }))}>Dashboard</Link>}
+                {user && <Link href={user.user_metadata.type == "owner" ?  "/dashboard/owner" : "/dashboard/minder"} className={cn(" text-background bg-[#DB3066]", buttonVariants({ variant: "ghost" }))}>Dashboard</Link>}
                 {user && <Button onClick={async () => {await client.auth.signOut(); router.refresh(); router.push("/sign-in")}}>Sign Out</Button>}
                 {/* only on small screens */}
                 <div className='items-center sm:hidden flex'>

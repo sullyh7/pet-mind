@@ -15,5 +15,9 @@ export const navLinks = [
     {
         title: "Become a Minder",
         href: "/sign-up"
+    },
+    {
+        title: "Message",
+        href: "/message"
     }
 ]
