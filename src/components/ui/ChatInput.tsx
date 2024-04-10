@@ -2,7 +2,6 @@
 
 import React from "react"
 import { Input } from "./input"
-import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useToast } from '@/components/ui/use-toast';
 import { createClient } from "../../../utils/supabase/client";
 
