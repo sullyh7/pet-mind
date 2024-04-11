@@ -5,6 +5,8 @@ import { DataTable } from './DataTable';
 import Link from 'next/link';
 import { CheckCircle, LucideMessageSquareText } from 'lucide-react';
 import { Button } from './ui/button';
+import { createClient } from '../../utils/supabase/client';
+import { useToast } from './ui/use-toast';
 
 interface Booking {
   approved: boolean | null;
@@ -22,6 +24,8 @@ interface BookingsViewProps {
 }
 
 const BookingsView = ({bookings, owner}: BookingsViewProps) => {
+  const client = createClient();
+  const {toast} = useToast();
 
   const columns: ColumnDef<Booking>[] = 
   !owner ? [
@@ -29,7 +33,7 @@ const BookingsView = ({bookings, owner}: BookingsViewProps) => {
       accessorKey: "approved",
       header: () => <div className="text-right">Approved</div>,
       cell: ({ row }) => {
-        const val = parseFloat(row.getValue("approved"))
+        const val = row.getValue("approved");
    
         return <div className="text-right font-medium">{val ? "Yes" : "Pending"}</div>
       },
@@ -66,8 +70,25 @@ const BookingsView = ({bookings, owner}: BookingsViewProps) => {
       accessorKey: "id",
       header: "Approve Booking",
       cell: ({row}) => {
-        const booking = row.getValue("id");
-        return <Button onClick={() => {}}><CheckCircle/></Button>
+        const booking = parseInt(row.getValue("id"));
+        return <Button onClick={() => {
+          client.from("bookings").update({
+            approved: true,
+
+          }).eq("id", booking).then((resp) => {
+            if (resp.error) {
+              toast({
+                title: "Error approving",
+                description: resp.error.message,
+                variant: "destructive",
+              })
+              return;
+            }
+            toast({
+              title: "Approved.",
+            })
+          })
+        }}><CheckCircle/></Button>
       }
     }
   ] : [
@@ -75,7 +96,7 @@ const BookingsView = ({bookings, owner}: BookingsViewProps) => {
       accessorKey: "approved",
       header: () => <div className="text-right">Approved</div>,
       cell: ({ row }) => {
-        const val = parseFloat(row.getValue("approved"))
+        const val = row.getValue("approved");
    
         return <div className="text-right font-medium">{val ? "Yes" : "Pending"}</div>
       },
