@@ -11,7 +11,7 @@ const Hero = () => {
                     {"Your Pet's Home, Away from Home"}
                 </h1>
                 <div className='flex flex-col gap-y-1 w-[50%] sm:w-full sm:flex-row justify-start gap-x-3'>
-                    <Link href={"/Search"}>
+                    <Link href={"/search"}>
                         <Button className='bg-[#db3066] text-background' size={"lg"}>Schedule a booking</Button>
                     </Link>
                     <Link href={"/about-us"}><Button size={"lg"}>About Us</Button></Link>
