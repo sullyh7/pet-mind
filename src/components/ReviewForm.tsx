@@ -36,6 +36,7 @@ const ReviewForm = ({minder_id, rating}: {minder_id: string, rating: number}) =>
     })
 
     function onSubmit(values: z.infer<typeof reviewFormSchema>) {
+      var save_err = false;
         console.log(values)
         client.from("reviews").insert({
             rating: values.rating,
@@ -48,6 +49,7 @@ const ReviewForm = ({minder_id, rating}: {minder_id: string, rating: number}) =>
               description: resp.error.message,
               variant: "destructive",
             })
+            save_err = true;
             return;
           }
           toast({
@@ -55,6 +57,9 @@ const ReviewForm = ({minder_id, rating}: {minder_id: string, rating: number}) =>
           })
         })
 
+        if (save_err) {
+          return;
+        }
         client.from("minder_profiles").update({
           rating: rating + values.rating
       }).eq("id", minder_id)
