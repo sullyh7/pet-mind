@@ -11,10 +11,12 @@ import { z } from 'zod'
 import { createClient } from '../../../utils/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { AuthResponse } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 
 const BecomeAMinder = () => {
   const supabase = createClient();
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof becomeAMinderFormSchema>>({
     resolver: zodResolver(becomeAMinderFormSchema),
@@ -60,8 +62,9 @@ const BecomeAMinder = () => {
 
       toast({
         title: "Signed up.",
-        
       })
+      router.push("/");
+      
     }).catch((e: any) => {
       toast({
         title: "Error signing up.",
@@ -69,7 +72,7 @@ const BecomeAMinder = () => {
         variant: "destructive",
       })
     })
-    // form.reset();
+    form.reset();
     console.log(values)
   }
 
