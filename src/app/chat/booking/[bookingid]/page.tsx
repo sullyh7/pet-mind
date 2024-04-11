@@ -49,7 +49,7 @@ const BookingChat = ({ params }: { params: { bookingid: number } }) => {
     return (
         <div>
             <ScrollArea className='gap-y-2 h-[15rem]'>
-                {msgs.map(m => <div key={m.id} className='bg-primary p-3 border'>
+                {msgs.map((m: { id: React.Key | null | undefined; message_text: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; user_id: string | undefined; }) => <div key={m.id} className='bg-primary p-3 border'>
                     <h1 className='text-lg'>{m.message_text}</h1>
                     <p className='text-sm'>{m.user_id == user?.id ? "You" : "Them:"}</p>
                 </div>)}
