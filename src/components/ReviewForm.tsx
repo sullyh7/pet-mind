@@ -71,7 +71,7 @@ const ReviewForm = ({minder_id, rating}: {minder_id: string, rating: number}) =>
           title: "Succesfully updated rating",
           description: resp.data
         })
-        router.push("/search");
+        router.refresh();
       })
       
     }
