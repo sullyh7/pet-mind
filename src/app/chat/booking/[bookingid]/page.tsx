@@ -33,18 +33,21 @@ const BookingChat = ({ params }: { params: { bookingid: number } }) => {
     }, [client.auth])
 
     useEffect(() => {
-        const posts = client.from("messages").select("*").then(m => setMsgs(m.data || []));
+        const posts = client.from("messages").select("*").eq("booking_id", params.bookingid).then(m => setMsgs(m.data || []));
         const channel = client
         .channel('realtime messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages'}, (payload) => {
-            setMsgs((prev: any) => [payload.new, ...prev]);
+            if (payload.new.booking_id == params.bookingid) {
+                setMsgs((prev: any) => [payload.new, ...prev]);
+            }
+            
         })
         .subscribe()
 
         return () => {
             client.removeChannel(channel);
         }
-    }, [client])
+    }, [client, params.bookingid])
     
     return (
         <div>
