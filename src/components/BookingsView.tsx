@@ -23,7 +23,8 @@ interface BookingsViewProps {
 
 const BookingsView = ({bookings, owner}: BookingsViewProps) => {
 
-  const columns: ColumnDef<Booking>[] = [
+  const columns: ColumnDef<Booking>[] = 
+  !owner ? [
     {
       accessorKey: "approved",
       header: () => <div className="text-right">Approved</div>,
@@ -52,14 +53,16 @@ const BookingsView = ({bookings, owner}: BookingsViewProps) => {
       accessorKey: "pet",
       header: "Pet",
     },
-    owner ? {
-      accessorKey: "minder_id",
-      header: "Chat with minder",
+    {
+      accessorKey: "id",
+      header: "Chat with owner",
       cell: ({row}) => {
-        const minder = row.getValue("minder_id");
-        return <Link href={"/chat/" + minder}><LucideMessageSquareText/></Link>
+        const booking = row.getValue("id");
+        return <Link href={"/chat/booking/" + booking}><LucideMessageSquareText/></Link>
       }
-    } : {
+    },
+
+    {
       accessorKey: "id",
       header: "Approve Booking",
       cell: ({row}) => {
@@ -67,6 +70,43 @@ const BookingsView = ({bookings, owner}: BookingsViewProps) => {
         return <Button onClick={() => {}}><CheckCircle/></Button>
       }
     }
+  ] : [
+    {
+      accessorKey: "approved",
+      header: () => <div className="text-right">Approved</div>,
+      cell: ({ row }) => {
+        const val = parseFloat(row.getValue("approved"))
+   
+        return <div className="text-right font-medium">{val ? "Yes" : "Pending"}</div>
+      },
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => {
+        const val: string = row.getValue("date")
+        const date = new Date(val).toString()
+
+   
+        return <div className=" font-medium">{date}</div>
+      },
+    },
+    {
+      accessorKey: "duration",
+      header: "Duration (hours)",
+    },
+    {
+      accessorKey: "pet",
+      header: "Pet",
+    },
+    {
+      accessorKey: "id",
+      header: "Chat with minder",
+      cell: ({row}) => {
+        const booking = row.getValue("id");
+        return <Link href={"/chat/booking/" + booking}><LucideMessageSquareText/></Link>
+      }
+    },
   ]
   if (!bookings) {
     return <h1>No bookings.</h1>

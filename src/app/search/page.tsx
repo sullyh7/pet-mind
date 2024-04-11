@@ -120,12 +120,18 @@ const SearchPage: React.FC = () => {
                                 <h1 className="text-1xl font-bold">{user.first_name + " " + user.last_name}</h1>
                                 <p>{user.location}</p>
                                 <p>Description: {user.description}</p>
-                                <p>Rating: {user.rating == 0 ? "No ratings" : user.rating}</p>
+                                <p>Points: {user.rating == 0 ? "No ratings" : user.rating}</p>
                                 <Link
                                 href={currentUser?.data.user ? `/book/${user.id}` : "/sign-in"}
                                   className={cn("inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background")}
                                 >
                                   {currentUser?.data.user ? "Book" : "Sign in to book"} 
+                                </Link>
+                                <Link
+                                href={"/review/" + user.id}
+                                  className={cn("inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/60 h-9 rounded-md px-4 bg-[#db3066] text-background")}
+                                >
+                                  Review
                                 </Link>
                             </div>
                         </div>

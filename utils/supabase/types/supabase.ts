@@ -61,6 +61,42 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          booking_id: number | null
+          id: number
+          message_text: string | null
+          user_id: string | null
+        }
+        Insert: {
+          booking_id?: number | null
+          id?: never
+          message_text?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          booking_id?: number | null
+          id?: never
+          message_text?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       minder_profiles: {
         Row: {
           avatar_url: string | null
@@ -159,6 +195,45 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          author_id: string | null
+          id: number
+          minder_id: string | null
+          rating: number | null
+          review_text: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          id?: never
+          minder_id?: string | null
+          rating?: number | null
+          review_text?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          id?: never
+          minder_id?: string | null
+          rating?: number | null
+          review_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_minder_id_fkey"
+            columns: ["minder_id"]
+            isOneToOne: false
+            referencedRelation: "minder_profiles"
             referencedColumns: ["id"]
           },
         ]
